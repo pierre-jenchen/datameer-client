@@ -85,14 +85,22 @@ class DatameerClient
   end
 
   # Creates a group in Datameer.
-  # @param [String] name Group name
+  # @param [String] name group name
   # @return [HTTParty::Response]
   def create_group(name)
     self.class.post("#{@url}/rest/user-management/groups", basic_auth: @auth, body: generate_group_payload(name), headers: {'Content-Type' => 'application/json'})
   end
 
+  # Creates a group in Datameer.
+  # @param [String] name group name
+  # @param [String] new_name new group name
+  # @return [HTTParty::Response]
+  def update_group(name, new_name)
+    self.class.put("#{@url}/rest/user-management/groups/#{URI.escape(name)}", basic_auth: @auth, body: generate_group_payload(new_name), headers: {'Content-Type' => 'application/json'})
+  end
+
   # Deletes a group in Datameer.
-  # @param [String] name Group name
+  # @param [String] name group name
   # @return [HTTParty::Response]
   def delete_group(name)
     self.class.delete("#{@url}/rest/user-management/groups/#{URI.escape(name)}", basic_auth: @auth)
@@ -106,10 +114,19 @@ class DatameerClient
 
   # Creates a role in Datameer.
   # @param [String] name Role name
-  # @param [Array<String>] capabilities capability name
+  # @param [Array<String>] capabilities capability name list
   # @return [HTTParty::Response]
-  def create_role(name,capabilities = DatameerRoleCapabilities.get_common_capabilities)
+  def create_role(name, capabilities = DatameerRoleCapabilities.get_common_capabilities)
     self.class.post("#{@url}/rest/user-management/roles", basic_auth: @auth, body: generate_role_payload(name,capabilities), headers: {'Content-Type' => 'application/json'})
+  end
+
+  # Deletes a role in Datameer.
+  # @param [String] name Role name
+  # @param [String] new_name new role name
+  # @param [Array<String>] capabilities capability name list
+  # @return [HTTParty::Response]
+  def update_role(name, new_name = name, capabilities)
+    self.class.put("#{@url}/rest/user-management/roles/#{URI.escape(name)}", basic_auth: @auth, body: generate_role_payload(new_name,capabilities), headers: {'Content-Type' => 'application/json'})
   end
 
   # Deletes a role in Datameer.
