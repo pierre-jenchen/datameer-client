@@ -125,7 +125,12 @@ class DatameerClient
   # @param [String] new_name new role name
   # @param [Array<String>] capabilities capability name list
   # @return [HTTParty::Response]
-  def update_role(name, new_name = name, capabilities)
+  def update_role(name, new_name = nil, capabilities)
+    if new_name.nil?
+      new_name = name
+    else
+      new_name = new_name
+    end
     self.class.put("#{@url}/rest/user-management/roles/#{URI.escape(name)}", basic_auth: @auth, body: generate_role_payload(new_name,capabilities), headers: {'Content-Type' => 'application/json'})
   end
 
