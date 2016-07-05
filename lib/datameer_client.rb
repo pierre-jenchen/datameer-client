@@ -120,17 +120,12 @@ class DatameerClient
     self.class.post("#{@url}/rest/user-management/roles", basic_auth: @auth, body: generate_role_payload(name,capabilities), headers: {'Content-Type' => 'application/json'})
   end
 
-  # Deletes a role in Datameer.
+  # Updates a role in Datameer.
   # @param [String] name Role name
   # @param [String] new_name new role name
   # @param [Array<String>] capabilities capability name list
   # @return [HTTParty::Response]
-  def update_role(name, new_name = nil, capabilities)
-    if new_name.nil?
-      new_name = name
-    else
-      new_name = new_name
-    end
+  def update_role(name, new_name = name, capabilities)
     self.class.put("#{@url}/rest/user-management/roles/#{URI.escape(name)}", basic_auth: @auth, body: generate_role_payload(new_name,capabilities), headers: {'Content-Type' => 'application/json'})
   end
 
