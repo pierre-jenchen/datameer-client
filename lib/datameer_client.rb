@@ -143,7 +143,7 @@ class DatameerClient
   # @param [Integer] parent_folder_id parent folder entity id OR uuid OR path
   # @return [HTTParty::Response]
   def create_folder(folder_name,parent_folder_id)
-    self.class.post("#{url}/api/filesystem/folders/#{URI.escape(parent_folder_id)}", basic_auth: @auth, body: {:name => folder_name}.to_json, headers: {'Content-Type' => 'application/json'})
+    self.class.post("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(parent_folder_id)}", basic_auth: @auth, body: {:name => folder_name}.to_json, headers: {'Content-Type' => 'application/json'})
   end
 
   # Renames a folder in Datameer.
@@ -151,7 +151,7 @@ class DatameerClient
   # @param [String] folder_name folder name
   # @return [HTTParty::Response]
   def rename_folder(id,folder_name)
-    self.class.put("#{url}/api/filesystem/folders/#{URI.escape(id)}/name", basic_auth: @auth, body: {:name => folder_name}.to_json, headers: {'Content-Type' => 'application/json'})
+    self.class.put("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(id)}/name", basic_auth: @auth, body: {:name => folder_name}.to_json, headers: {'Content-Type' => 'application/json'})
   end
 
   # Moves a folder in Datameer.
@@ -159,21 +159,21 @@ class DatameerClient
   # @param [String, Integer] parent_folder the parent folders path OR entity_id OR uuid
   # @return [HTTParty::Response]
   def move_folder(id,parent_folder)
-    self.class.put("#{url}/api/filesystem/folders/#{URI.escape(id)}/parent", basic_auth: @auth,body: {'parentFolder' => parent_folder}.to_json, headers: {'Content-Type' => 'application/json'})
+    self.class.put("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(id)}/parent", basic_auth: @auth,body: {'parentFolder' => parent_folder}.to_json, headers: {'Content-Type' => 'application/json'})
   end
 
   # Deletes an empty folder in Datameer.
   # @param [Integer] id folder entity id
   # @return [HTTParty::Response]
   def delete_folder(id)
-    self.class.delete("#{url}/api/filesystem/folders/#{URI.escape(id)}", basic_auth: @auth)
+    self.class.delete("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(id)}", basic_auth: @auth)
   end
 
   # Creates a backup of a folder
   # @param [String, Integer] folder folders entity id OR uuid OR path
   # @return [HTTParty::Response]
   def backup_folder(folder)
-    self.class.get("#{url}/api/filesystem/folders/#{URI.escape(folder)}/backup", basic_auth: @auth)
+    self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup", basic_auth: @auth)
   end
 
   # Restores a folder based on a zip
@@ -181,7 +181,7 @@ class DatameerClient
   # @param [String] folder_zip backup zip of a folder and its content
   # @return [HTTParty::Response]
   def restore_folder(folder_zip,parent_folder)
-    self.class.put("#{url}/api/filesystem/folders/#{URI.escape(parent_folder)}/restore", basic_auth: @auth, body: folder_zip, headers: {'Content-Type' => 'application/zip'})
+    self.class.put("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(parent_folder)}/restore", basic_auth: @auth, body: folder_zip, headers: {'Content-Type' => 'application/zip'})
   end
 
   # *** entity management ***
