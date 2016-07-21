@@ -34,7 +34,7 @@ class DatameerClient
   # Datameer version, user name, email address, active/inactive, expiration date, group(s), and role(s).
   # @return [HTTParty::Response]
   def get_users
-    self.class.get("#{@url}/rest/user-management/users", basic_auth: @auth)
+    self.class.get("#{@url}/rest/user-management/users?maxResults=1000", basic_auth: @auth)
   end
 
   # Creates an internal user in Datameer.
