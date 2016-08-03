@@ -175,19 +175,22 @@ class DatameerClient
   # @return [HTTParty::Response]
   def backup_folder(folder, options = [])
     option_params = ''
-    options.each do |option|
-      if (option =~ /group/i) != nil
-        option_params << '&includeGroupPermissions'
-      elsif (option =~ /owner/i) != nil
-        option_params << '&includeOwner'
-      elsif (option =~ /sharing/i) != nil
-        option_params << '&includeSharing'
-      elsif (option =~ /ignore/i) != nil
-        option_params << '&ignoreMissingDependencies'
-      elsif (option =~ /skip/i) != nil
-        option_params << '&skipFilesWithMissingDependencies'
+    unless options.nil?
+      options = options.split(',')
+      options.each do |option|
+        if (option =~ /group/i) != nil
+          option_params << '&includeGroupPermissions'
+        elsif (option =~ /owner/i) != nil
+          option_params << '&includeOwner'
+        elsif (option =~ /sharing/i) != nil
+          option_params << '&includeSharing'
+        elsif (option =~ /ignore/i) != nil
+          option_params << '&ignoreMissingDependencies'
+        elsif (option =~ /skip/i) != nil
+          option_params << '&skipFilesWithMissingDependencies'
+        end
+        option_params[0] = '?'
       end
-      option_params[0] = '?'
     end
     self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup#{option_params}", basic_auth: @auth)
   end
