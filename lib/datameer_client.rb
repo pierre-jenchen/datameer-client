@@ -171,9 +171,25 @@ class DatameerClient
 
   # Creates a backup of a folder
   # @param [String, Integer] folder folders entity id OR uuid OR path
+  # @param [Array] options optional parameters to backup owner reference, group sharing or permissions
   # @return [HTTParty::Response]
-  def backup_folder(folder)
-    self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup", basic_auth: @auth)
+  def backup_folder(folder, options = [])
+    option_params = ''
+    options.each do |option|
+      if (option =~ /group/i) != nil
+        option_params << '&includeGroupPermissions'
+      elsif (option =~ /owner/i) != nil
+        option_params << '&includeOwner'
+      elsif (option =~ /sharing/i) != nil
+        option_params << '&includeSharing'
+      elsif (option =~ /ignore/i) != nil
+        option_params << '&ignoreMissingDependencies'
+      elsif (option =~ /skip/i) != nil
+        option_params << '&skipFilesWithMissingDependencies'
+      end
+      option_params[0] = '?'
+    end
+    self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup#{option_params}", basic_auth: @auth)
   end
 
   # Restores a folder based on a zip
