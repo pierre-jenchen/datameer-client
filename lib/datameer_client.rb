@@ -190,7 +190,7 @@ class DatameerClient
   # @return [String]
   def transform_backup_options(options)
     option_params = ''
-    unless options.nil?
+    unless options.nil? || options.size == 0
       options = options.split(',')
       options.each do |option|
         if (option =~ /group/i) != nil
