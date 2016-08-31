@@ -219,10 +219,11 @@ class DatameerClient
   # *** workbooks ***
 
   def get_workbook(id)
+    warn "[DEPRECATION] `get_workbook` is deprecated. Please use `get_workbook_v2` instead"
     self.class.get("#{@url}/rest/workbook/#{id}", basic_auth: @auth)
   end
 
-  def get_workbookv2(uuid)
+  def get_workbook_v2(uuid)
     self.class.get("#{@url}/api/filesystem/workbooks/#{uuid}", basic_auth: @auth)
   end
 
@@ -243,10 +244,11 @@ class DatameerClient
   end
 
   def create_workbook(data)
+    warn "[DEPRECATION] `create_workbook` is deprecated. Please use `create_workbook_v2` instead"
     self.class.post("#{@url}/rest/workbook", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
-  def create_workbookv2(data)
+  def create_workbook_v2(data)
     self.class.post("#{@url}/api/filesystem/workbooks", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
