@@ -256,7 +256,7 @@ class DatameerClient
     self.class.put("#{@url}/rest/workbook/#{id}", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
-  def update_workbookv2(data, uuid)
+  def update_workbook_v2(data, uuid)
     self.class.put("#{@url}/api/filesystem/workbooks/#{uuid}", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
