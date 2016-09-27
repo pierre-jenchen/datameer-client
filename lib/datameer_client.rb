@@ -171,17 +171,43 @@ class DatameerClient
 
   # Creates a backup of a folder
   # @param [String, Integer] folder folders entity id OR uuid OR path
+  # @param [Array] options optional parameters to backup owner reference, group sharing or permissions
   # @return [HTTParty::Response]
-  def backup_folder(folder)
-    self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup", basic_auth: @auth)
+  def backup_folder(folder, options = [])
+    self.class.get("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(folder)}/backup#{transform_backup_options(options)}", basic_auth: @auth)
   end
 
   # Restores a folder based on a zip
   # @param [String, Integer] parent_folder folders entity id OR uuid OR path
   # @param [String] folder_zip backup zip of a folder and its content
   # @return [HTTParty::Response]
-  def restore_folder(folder_zip,parent_folder)
-    self.class.put("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(parent_folder)}/restore", basic_auth: @auth, body: folder_zip, headers: {'Content-Type' => 'application/zip'})
+  def restore_folder(folder_zip, parent_folder, options = [])
+    self.class.put("#{url}/api/filesystem/folders/#{ERB::Util.url_encode(parent_folder)}/restore#{transform_backup_options(options)}", basic_auth: @auth, body: folder_zip, headers: {'Content-Type' => 'application/zip'})
+  end
+
+  # Transforms a comma separated list of options for advanced usage of folder backup or restore in valid URL parameters
+  # @param [String] options the options as comma separated list of keywords
+  # @return [String]
+  def transform_backup_options(options)
+    option_params = ''
+    unless options.nil? || options.size == 0
+      options = options.split(',')
+      options.each do |option|
+        if (option =~ /group/i) != nil
+          option_params << '&includeGroupPermissions'
+        elsif (option =~ /owner/i) != nil
+          option_params << '&includeOwner'
+        elsif (option =~ /sharing/i) != nil
+          option_params << '&includeSharing'
+        elsif (option =~ /ignore/i) != nil
+          option_params << '&ignoreMissingDependencies'
+        elsif (option =~ /skip/i) != nil
+          option_params << '&skipFilesWithMissingDependencies'
+        end
+        option_params[0] = '?'
+      end
+    end
+    option_params
   end
 
   # *** entity management ***
