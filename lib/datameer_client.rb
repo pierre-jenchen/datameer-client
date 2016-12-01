@@ -189,25 +189,31 @@ class DatameerClient
   # @param [String] options the options as comma separated list of keywords
   # @return [String]
   def transform_backup_options(options)
-    option_params = ''
     unless options.nil? || options.size == 0
+      option_params = []
       options = options.split(',')
       options.each do |option|
         if (option =~ /group/i) != nil
           option_params << '&includeGroupPermissions'
         elsif (option =~ /owner/i) != nil
           option_params << '&includeOwner'
+        elsif (option =~ /substitute/i) != nil
+          option_params << '&substituteMissingUser'
         elsif (option =~ /sharing/i) != nil
           option_params << '&includeSharing'
+        elsif (option =~ /data/i) != nil
+          option_params << '&includeDataPermissions'
         elsif (option =~ /ignore/i) != nil
           option_params << '&ignoreMissingDependencies'
         elsif (option =~ /skip/i) != nil
           option_params << '&skipFilesWithMissingDependencies'
         end
-        option_params[0] = '?'
       end
+      option_params.sort!
+      option_params = option_params.join
+      option_params[0] = '?'
+      option_params
     end
-    option_params
   end
 
   # *** entity management ***
@@ -413,7 +419,7 @@ class DatameerClient
     self.class.get("#{@url}/admin/system-overview/runningJobs", basic_auth: @auth)
   end
 
-  def generate_group_payload(name)
+  def sgenerate_group_payload(name)
     generate_payload = {:name => name}.to_json
   end
 
