@@ -419,7 +419,7 @@ class DatameerClient
     self.class.get("#{@url}/admin/system-overview/runningJobs", basic_auth: @auth)
   end
 
-  def sgenerate_group_payload(name)
+  def generate_group_payload(name)
     generate_payload = {:name => name}.to_json
   end
 
