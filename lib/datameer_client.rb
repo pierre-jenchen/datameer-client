@@ -44,7 +44,7 @@ class DatameerClient
   # @param [String] group can be empty
   # @param [String] password
   # @return [HTTParty::Response]
-  def create_user(name,email,role,group,password)
+  def create_user(name,email,role,password,group = nil)
     user_data = {
         :username => name,
         :email => email,
@@ -52,7 +52,7 @@ class DatameerClient
         :roles => [role]
 
     }
-    user_data.delete_if {|key, value| key == :groups && value[0].empty? }
+    user_data.delete_if {|key, value| key == :groups && value[0].nil? }
     self.class.post("#{@url}/rest/user-management/users", basic_auth: @auth, body: user_data.to_json, headers: {'Content-Type' => 'application/json'})
     self.class.put("#{@url}/rest/user-management/password/#{URI.escape(name)}", basic_auth: @auth, body: password)
   end
@@ -193,19 +193,23 @@ class DatameerClient
       option_params = []
       options = options.split(',')
       options.each do |option|
-        if (option =~ /group/i) != nil
+        if (option =~ /^group/i) != nil
           option_params << '&includeGroupPermissions'
-        elsif (option =~ /owner/i) != nil
+        elsif (option =~ /^owner/i) != nil
           option_params << '&includeOwner'
-        elsif (option =~ /substitute/i) != nil
+        elsif (option =~ /^substitute/i) != nil
           option_params << '&substituteMissingUser'
-        elsif (option =~ /sharing/i) != nil
+        elsif (option =~ /^sharing/i) != nil
           option_params << '&includeSharing'
-        elsif (option =~ /data/i) != nil
+        elsif (option =~ /^overwrite/i) != nil
+          option_params << '&overwrite'
+        elsif (option =~ /^ignore_groups/i) != nil
+          option_params << '&ignoreUnknownGroups'
+        elsif (option =~ /^data/i) != nil
           option_params << '&includeDataPermissions'
-        elsif (option =~ /ignore/i) != nil
+        elsif (option =~ /^ignore_dependencies/i) != nil
           option_params << '&ignoreMissingDependencies'
-        elsif (option =~ /skip/i) != nil
+        elsif (option =~ /^skip/i) != nil
           option_params << '&skipFilesWithMissingDependencies'
         end
       end
