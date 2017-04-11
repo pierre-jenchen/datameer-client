@@ -469,6 +469,10 @@ class DatameerClient
     self.class.get("#{@url}/api/filesystem/#{type}s/#{id}/permission/#{target}", basic_auth: @auth)
   end
 
+  def change_owner_of_folder(id,owner)
+    self.class.put("#{@url}/api/filesystem/folders/#{id}/permission/owner", basic_auth: @auth, body: "{owner:#{owner}}", headers: {'Content-Type' => 'application/json'})
+  end
+
   def create_group_permission_for_folder(id,body)
     self.class.post("#{@url}/api/filesystem/folders/#{id}/permission/groups", basic_auth: @auth, body: "{#{body}}", headers: {'Content-Type' => 'application/json'})
   end
@@ -483,6 +487,10 @@ class DatameerClient
 
   def delete_group_permission_for_folder(id,group)
     self.class.delete("#{@url}/api/filesystem/folders/#{id}/permission/groups/#{group}", basic_auth: @auth, headers: {'Content-Type' => 'application/json'})
+  end
+
+  def change_owner_of_file(id,owner)
+    self.class.put("#{@url}/api/filesystem/files/#{id}/permission/owner", basic_auth: @auth, body: "{owner:#{owner}}", headers: {'Content-Type' => 'application/json'})
   end
 
   def create_group_permission_for_file(id,body)
