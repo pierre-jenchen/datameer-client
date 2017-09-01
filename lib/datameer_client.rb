@@ -447,6 +447,10 @@ class DatameerClient
     self.class.delete("#{@url}/rest/data/#{exec_id}", basic_auth: @auth)
   end
 
+  def delete_file(file_id)
+    self.class.delete("#{@url}/api/filesystem/files?fileIds=#{file_id}", basic_auth: @auth)
+  end
+
   # ********************************
   # *** Permission and Ownership ***
 
