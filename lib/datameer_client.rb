@@ -412,7 +412,7 @@ class DatameerClient
   end
 
   def get_product_id
-    self.class.get("#{@url}//license/product-id", basic_auth: @auth)
+    self.class.get("#{@url}/license/product-id", basic_auth: @auth)
   end
 
   def get_running_jobs
@@ -518,7 +518,9 @@ class DatameerClient
   end
 
   def get_conductor_log
-    self.class.get("#{@url}/admin/application-log-download", basic_auth: @auth)
+    res = self.class.get("#{@url}/admin/application-log-download", basic_auth: @auth)
+    self.class.get("#{@url}/j_spring_security_logout", headers: {'Cookie' => res.headers['Set-Cookie'] })
+    res
   end
 
   def get_entity_job(entity_id)
@@ -526,10 +528,14 @@ class DatameerClient
   end
 
   def get_job_log(job_execution_id)
-    self.class.get("#{@url}/file-job?jobExecutionId=#{job_execution_id}", basic_auth: @auth)
+    res = self.class.get("#{@url}/file-job?jobExecutionId=#{job_execution_id}", basic_auth: @auth)
+    self.class.get("#{@url}/j_spring_security_logout", headers: {'Cookie' => res.headers['Set-Cookie'] })
+    res
   end
 
   def get_job_trace(job_execution_id)
-    self.class.get("#{@url}/job/download-trace/#{job_execution_id}", basic_auth: @auth)
+    res = self.class.get("#{@url}/job/download-trace/#{job_execution_id}", basic_auth: @auth)
+    self.class.get("#{@url}/j_spring_security_logout", headers: {'Cookie' => res.headers['Set-Cookie'] })
+    res
   end
 end
