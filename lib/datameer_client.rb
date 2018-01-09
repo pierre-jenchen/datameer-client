@@ -260,7 +260,7 @@ class DatameerClient
   end
 
   def get_workbook_v2(uuid)
-    self.class.get("#{@url}/api/filesystem/workbooks/#{uuid}", basic_auth: @auth)
+    self.class.get("#{@url}/api/workbooks/#{uuid}", basic_auth: @auth)
   end
 
   def get_workbooks
@@ -285,7 +285,7 @@ class DatameerClient
   end
 
   def create_workbook_v2(data)
-    self.class.post("#{@url}/api/filesystem/workbooks", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
+    self.class.post("#{@url}/api/workbooks", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
   def update_workbook(data, id)
@@ -293,11 +293,11 @@ class DatameerClient
   end
 
   def update_workbook_v2(data, uuid)
-    self.class.put("#{@url}/api/filesystem/workbooks/#{uuid}", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
+    self.class.put("#{@url}/api/workbooks/#{uuid}", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
   def rollback_workbook(data)
-    self.class.put("#{@url}/api/filesystem/workbook-rollback", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
+    self.class.put("#{@url}/api/workbooks/rollback", basic_auth: @auth, body: data, headers: {'Content-Type' => 'application/json'})
   end
 
   # ** exportjobs ***
