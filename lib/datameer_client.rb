@@ -447,6 +447,10 @@ class DatameerClient
     self.class.delete("#{@url}/rest/data/#{exec_id}", basic_auth: @auth)
   end
 
+  def set_tag(file_id, tags)
+    self.class.put("#{@url}/api/filesystem/files/#{file_id}/command", basic_auth: @auth, body: "{_type: SetTags, tags:[#{tags}]}", headers: {'Content-Type' => 'application/json'})
+  end
+
   # ********************************
   # *** Permission and Ownership ***
 
